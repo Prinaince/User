@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up System</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-600 to-blue-500 min-h-screen">
+    <!-- Sign Up Page -->
+    <div id="signupPage" class="container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-6">
+                <h2 class="text-3xl font-bold text-white text-center">Sign Up</h2>
+                <p class="text-purple-200 text-center mt-2">Create your account</p>
+            </div>
+            
+            <form id="signupForm" class="p-8 space-y-6">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="signupName">
+                        Full Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="signupName" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                        placeholder="Enter your full name"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="signupEmail">
+                        Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        id="signupEmail" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                        placeholder="Enter your email"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="signupPassword">
+                        Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="signupPassword" 
+                        required
+                        minlength="6"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                        placeholder="Create a password (min 6 characters)"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="confirmPassword">
+                        Confirm Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                        placeholder="Confirm your password"
+                    >
+                </div>
+                
+                <button 
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:from-purple-700 hover:to-indigo-700 transform hover:scale-105 transition duration-300"
+                >
+                    Sign Up
+                </button>
+                
+                <p class="text-center text-gray-600">
+                    Already have an account? 
+                    <a href="#" onclick="showPage('login')" class="text-purple-600 font-bold hover:underline">Login here</a>
+                </p>
+            </form>
+            
+            <div id="signupMessage" class="hidden p-4 text-center"></div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="hidden container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-600 to-cyan-600 p-6">
+                <h2 class="text-3xl font-bold text-white text-center">Login</h2>
+                <p class="text-blue-200 text-center mt-2">Welcome back!</p>
+            </div>
+            
+            <form id="loginForm" class="p-8 space-y-6">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="loginEmail">
+                        Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        id="loginEmail" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        placeholder="Enter your email"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="loginPassword">
+                        Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="loginPassword" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        placeholder="Enter your password"
+                    >
+                </div>
+                
+                <button 
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-cyan-700 transform hover:scale-105 transition duration-300"
+                >
+                    Login
+                </button>
+                
+                <p class="text-center text-gray-600">
+                    Don't have an account? 
+                    <a href="#" onclick="showPage('signup')" class="text-blue-600 font-bold hover:underline">Sign up here</a>
+                </p>
+            </form>
+            
+            <div id="loginMessage" class="hidden p-4 text-center"></div>
+        </div>
+    </div>
+
+
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://weunyluildqsgbsmmawi.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndldW55bHVpbGRxc2dic21tYXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MTQ1MTAsImV4cCI6MjA4NTA5MDUxMH0.MpC1WcT120r59MPz_Bt8CBnXjTusajlu4OPmd_6KHkw';
+
+        // Initialize Supabase
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Show/Hide Pages
+        function showPage(page) {
+            document.getElementById('signupPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.add('hidden');
+            
+            document.getElementById(page + 'Page').classList.remove('hidden');
+            
+            // Clear messages
+            hideAllMessages();
+        }
+
+        function hideAllMessages() {
+            document.getElementById('signupMessage').classList.add('hidden');
+            document.getElementById('loginMessage').classList.add('hidden');
+        }
+
+        function showMessage(elementId, message, isError = true) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `p-4 text-center rounded-lg ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+            element.classList.remove('hidden');
+        }
+
+        // Sign Up Function
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAllMessages();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showMessage('signupMessage', 'Passwords do not match!');
+                return;
+            }
+            
+            try {
+                // Check if email already exists
+                const { data: existingUsers } = await supabaseClient
+                    .from('users')
+                    .select('email')
+                    .eq('email', email)
+                    .maybeSingle();
+                
+                if (existingUsers) {
+                    showMessage('signupMessage', 'This email is already registered!');
+                    return;
+                }
+                
+                // Insert user data into users table
+                const { data, error } = await supabaseClient
+                    .from('users')
+                    .insert({
+                        name: name,
+                        email: email,
+                        password: password,
+                        is_blocked: false,
+                        created_at: new Date().toISOString()
+                    })
+                    .select();
+                
+                if (error) {
+                    console.error('Insert error:', error);
+                    showMessage('signupMessage', 'Error: ' + error.message);
+                    return;
+                }
+                
+                showMessage('signupMessage', 'Account created successfully! Redirecting to login...', false);
+                setTimeout(() => {
+                    showPage('login');
+                    document.getElementById('loginEmail').value = email;
+                    document.getElementById('signupForm').reset();
+                }, 1500);
+                
+            } catch (err) {
+                console.error('Signup error:', err);
+                showMessage('signupMessage', 'An unexpected error occurred: ' + err.message);
+            }
+        });
+
+        // Login Function
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAllMessages();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                // First check if user exists in our users table
+                const { data: userData, error: userError } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('email', email)
+                    .single();
+                
+                if (userError || !userData) {
+                    showMessage('loginMessage', 'User not found! Please sign up first.');
+                    return;
+                }
+                
+                // Check if user is blocked
+                if (userData.is_blocked === true) {
+                    showMessage('loginMessage', 'Your account has been blocked. Please contact support.');
+                    return;
+                }
+                
+                // For demo purposes, we're doing a direct password comparison
+                // In production, use Supabase Auth for proper authentication
+                if (userData.password === password) {
+                    // Store user session
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    showMessage('loginMessage', 'Login successful! Redirecting...', false);
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    showMessage('loginMessage', 'Invalid password!');
+                }
+                
+            } catch (err) {
+                console.error('Login error:', err);
+                showMessage('loginMessage', 'An unexpected error occurred: ' + err.message);
+            }
+        });
+
+        // Page load - show login page
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('login');
+        });
+    </script>
+</body>
+</html>
