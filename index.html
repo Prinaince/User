@@ -139,8 +139,6 @@
         </div>
     </div>
 
-
-
     <script>
         // Supabase Configuration
         const SUPABASE_URL = 'https://weunyluildqsgbsmmawi.supabase.co';
@@ -154,7 +152,6 @@
         function showPage(page) {
             document.getElementById('signupPage').classList.add('hidden');
             document.getElementById('loginPage').classList.add('hidden');
-            document.getElementById('dashboardPage').classList.add('hidden');
             
             document.getElementById(page + 'Page').classList.remove('hidden');
             
@@ -260,8 +257,7 @@
                     return;
                 }
                 
-                // For demo purposes, we're doing a direct password comparison
-                // In production, use Supabase Auth for proper authentication
+                // Check password
                 if (userData.password === password) {
                     // Store user session
                     localStorage.setItem('currentUser', JSON.stringify(userData));
