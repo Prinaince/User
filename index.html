@@ -264,7 +264,10 @@
                     
                     showMessage('loginMessage', 'Login successful! Redirecting...', false);
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        // =========== YAHAN CHANGE KIYA HAI MAINE ============
+                        // Ab Dashboard ke link ke sath UID bhi jayega
+                        window.location.href = 'dashboard.html?uid=' + userData.id;
+                        // ====================================================
                     }, 1000);
                 } else {
                     showMessage('loginMessage', 'Invalid password!');
